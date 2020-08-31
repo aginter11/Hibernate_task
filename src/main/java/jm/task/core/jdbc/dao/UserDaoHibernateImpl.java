@@ -52,8 +52,16 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession();) {
             transaction = session.beginTransaction();
-            User user = new User(name, lastName, age);
-            session.save(user);
+            String sqlSaveUser = "INSERT INTO users_hib (name, lastName, age) VALUES(?, ?, ?)";
+//            User user = new User(name, lastName, age);
+//            session.save(user);
+            Query query =
+                    session.createSQLQuery(sqlSaveUser);
+            query.setParameter(1, name);
+            query.setParameter(2, lastName);
+            query.setParameter(3, age);
+            query.executeUpdate();
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -67,7 +75,9 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession();) {
             transaction = session.beginTransaction();
-            session.createQuery("delete User where id = :param").setParameter("param", id).executeUpdate();
+         //   session.createQuery("delete User where id = :param").setParameter("param", id).executeUpdate();
+            session.createSQLQuery("DELETE FROM users_hib WHERE id=?").setParameter(1,id).executeUpdate();
+
             transaction.commit();
 
         } catch (Exception e) {
@@ -84,10 +94,9 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = Util.getSessionFactory().openSession();) {
             transaction = session.beginTransaction();
             String sql = "SELECT * FROM users_hib";
-            SQLQuery query = session.createSQLQuery(sql);
-            query.addEntity(User.class);
+            SQLQuery query = session.createSQLQuery(sql).addEntity(User.class);
             users = query.list();
-       //     users = session.createQuery("from User").list();
+            //     users = session.createQuery("from User").list();
             transaction.commit();
 
         } catch (Exception e) {
@@ -96,7 +105,8 @@ public class UserDaoHibernateImpl implements UserDao {
                 System.out.println("Exception - rollback");
             }
         }
-        System.out.println(users);
+        users.forEach(System.out::println);
+
         return users;
     }
 
