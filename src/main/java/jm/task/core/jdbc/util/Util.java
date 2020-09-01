@@ -24,20 +24,9 @@ public class Util {
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "root";
 
+    private static Connection connection;
     private static SessionFactory sessionFactory; //Hibernate
 
-    public static Connection getConnection() {
-        Connection connection = null;
-        try {
-            Class.forName(DB_DRIVER);
-            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-            System.out.println("Connection ERROR");
-        }
-        return connection;
-    }
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
@@ -68,5 +57,19 @@ public class Util {
             }
         }
         return sessionFactory;
+    }
+
+    public static Connection getConnection() {
+        try {
+            if (connection == null) {
+                Class.forName(DB_DRIVER);
+                connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            System.out.println("Connection ERROR");
+        }
+
+        return connection;
     }
 }

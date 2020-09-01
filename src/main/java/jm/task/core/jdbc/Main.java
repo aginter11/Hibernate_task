@@ -19,9 +19,9 @@ public class Main {
 //        us.dropUsersTable();
 
 
-        us.saveUser("Ivan", "Ivanov", (byte) 11);
-        us.saveUser("Petr", "Petrov", (byte) 22);
-        us.saveUser("Igor", "Sidorov", (byte) 33);
+//        us.saveUser("Ivan", "Ivanov", (byte) 11);
+//        us.saveUser("Petr", "Petrov", (byte) 22);
+//        us.saveUser("Igor", "Sidorov", (byte) 33);
         us.getAllUsers();
 
      //   us.saveUser("AAA", "BBB", (byte) 55);
